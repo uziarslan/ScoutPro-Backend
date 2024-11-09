@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Saira+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<style>
+  @import url(https://db.onlinewebfonts.com/c/2da952d097bffd198ec0f0aa3fdd6804?family=JejuHallasan);
+
+  @font-face {
+    font-family: "JejuHallasan";
+    src: url("https://db.onlinewebfonts.com/t/2da952d097bffd198ec0f0aa3fdd6804.eot");
+    src: url("https://db.onlinewebfonts.com/t/2da952d097bffd198ec0f0aa3fdd6804.eot?#iefix")format("embedded-opentype"),
+      url("https://db.onlinewebfonts.com/t/2da952d097bffd198ec0f0aa3fdd6804.woff2")format("woff2"),
+      url("https://db.onlinewebfonts.com/t/2da952d097bffd198ec0f0aa3fdd6804.woff")format("woff"),
+      url("https://db.onlinewebfonts.com/t/2da952d097bffd198ec0f0aa3fdd6804.ttf")format("truetype"),
+      url("https://db.onlinewebfonts.com/t/2da952d097bffd198ec0f0aa3fdd6804.svg#JejuHallasan")format("svg");
+  }
+
+
+  body {
+    font-family: "Roboto", "sans-serif";
+    margin: 0;
+    padding: 0;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mugWrapper {
+    width: 120px;
+    height: 104px;
+  }
+
+  .mugShot {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .playerName {
+    color: #000;
+    font-family: "Roboto";
+    font-size: 54px;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .bannerWrapper {
+    position: relative;
+    height: 61px;
+    display: flex;
+    padding-left: 14px;
+  }
+
+  .bannerWrapperReverse {
+    position: relative;
+    height: 200px;
+    display: flex;
+    width: 100%;
+  }
+
+  .bannerWrapper svg {
+    position: absolute;
+    top: -45px;
+    left: 0;
+    width: 115%;
+  }
+
+  .bannerWrapperReverse svg {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .statsWrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    position: relative;
+    z-index: 1;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .statsWrapperReverse {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    position: relative;
+    z-index: 1;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    padding-right: 50px;
+  }
+
+  .statContainer {
+    border-right: 2px solid white;
+    padding-right: 11px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 63px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .statContainerReverse {
+    border-right: 2px solid white;
+    padding-right: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .statContainerReverse:nth-child(2) {
+    border-right-color: #A61E36;
+  }
+
+
+  .statContainer:last-child {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .statContainerReverse:last-child {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .statHeading {
+    color: #FFF;
+    font-family: "Roboto";
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .statHeadingReverse {
+    color: #FFF;
+    font-family: "Roboto";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .stats {
+    color: #FFF;
+    text-align: center;
+    font-family: "Saira Condensed";
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .statsSub {
+    color: #FFF;
+    text-align: center;
+    font-family: "Roboto";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 300;
+    margin: 0;
+  }
+
+  .statsReverse {
+    color: #FFF;
+    text-align: center;
+    font-family: "Saira Condensed";
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .description {
+    color: #000;
+    font-family: "Roboto";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    width: 50%;
+    /* padding-left: 40px; */
+  }
+
+  .standingWrapper {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+  }
+
+  .standingShot {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  hr {
+    height: 3px;
+    background-color: #A61E36;
+  }
+
+  .footer {
+    padding: 0 25px;
+  }
+
+  .footerHeading {
+    color: #000;
+    text-align: center;
+    font-family: "Roboto Condensed";
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .b-bg {
+    color: #FFF;
+    text-align: center;
+    font-family: "JejuHallasan";
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background-color: #000;
+  }
+
+  .r-bg {
+    background-color: #A61E36;
+    color: white;
+    padding: 3px 20px;
+    display: inline-block;
+    text-align: center;
+    width: 50%;
+    text-align: center;
+    font-family: "Roboto Condensed";
+    font-size: 18px;
+    font-weight: 400;
+    text-transform: capitalize;
+  }
+
+  .footerStatsContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .footerStatWrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 25px;
+  }
+
+  .footerStat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footerStatHeading {
+    color: #000;
+    font-family: "Roboto";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .footerStat {
+    color: #000;
+    text-align: center;
+    font-family: "Saira Condensed";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .y-bg {
+    background-color: #FFDE5A;
+    padding: 0px 27px;
+  }
+
+  .footerLogoWrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 15px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .logoWrapper {
+    width: 200px;
+    height: 50px;
+  }
+
+  .logo {
+    width: 200px;
+    object-fit: contain;
+    height: 50px;
+  }
+
+  .hrWrapper {
+    width: 100%;
+  }
+
+</style>
+
+<body>
+  <div class="mainHeader">
+    <div class="row">
+      <div class="mugWrapper">
+        <img src="https://res.cloudinary.com/uzairarslan/image/upload/v1730518031/ScoutPro/Players/ehqjrudw4jw61lzju8pt.png" class="mugShot" />
+      </div>
+      <h1 class="playerName">GRANT NELSON</h1>
+    </div>
+    <div class="row">
+      <div class="bannerWrapper">
+        <div class="statsWrapper">
+          <div class="statContainer">
+            <p class="statHeading">Weight</p>
+            <p class="stats">238</p>
+          </div>
+          <div class="statContainer">
+            <p class="statHeading">Height</p>
+            <p class="stats">6’11</p>
+          </div>
+          <div class="statContainer">
+            <p class="statHeading">Body Comp</p>
+            <p class="stats">16.1%</p>
+            <p class="statsSub">*DEXA</p>
+          </div>
+          <div class="statContainer">
+            <p class="statHeading">Wingspan</p>
+            <p class="stats">7’</p>
+          </div>
+          <div class="statContainer">
+            <p class="statHeading">Standing Reach</p>
+            <p class="stats">9’5’</p>
+          </div>
+          <div class="statContainer">
+            <p class="statHeading">Hand Length/Width</p>
+            <p class="stats">9’/10’</p>
+          </div>
+        </div>
+        <svg height="150" viewBox="0 0 1234 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M1233.9 0H0V150H1103.84L1233.9 0ZM1233.9 0L1234 0.0826703V0H1233.9Z" fill="#A61E36" />
+        </svg>
+      </div>
+    </div>
+    <div class="row">
+      <p class="description">Nelson is the prototypical point forward, who can impact the game in many different ways. At 6'11, he has the size and athleticism to overpower people around the rim, as well as defend the paint with his length. Nelson also has unique guard skills, and is very comfortable handling the ball on the perimeter.
+        Defensively, Grant can guard multiple positions, though he can struggle against bigger, stronger centers. Nelson has been consistent with improving his three point shot, as well as his decision making, and is arguably the most versatile player in college basketball.</p>
+      <div class="standingWrapper">
+        <img class="standingShot" src="https://res.cloudinary.com/uzairarslan/image/upload/v1730518031/ScoutPro/Players/ehqjrudw4jw61lzju8pt.png" />
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: row-reverse; position: relative; margin-top: 15px;">
+      <div style="display: flex; flex-direction: row; flex-wrap: wrap; width: 346px; position: relative; z-index: 1; justify-content: flex-end; align-items: center; height: 136px; padding-top: 0px;">
+        <div class="statContainerReverse" style="width: 30%;">
+          <p class="statHeadingReverse">Max Vert</p>
+          <p class="statsReverse">35.5’</p>
+        </div>
+        <div class="statContainerReverse" style="width: 41%;">
+          <p class="statHeadingReverse">Standing Vert</p>
+          <p class="statsReverse">32.5’</p>
+        </div>
+        <div class="statContainerReverse" style="width: 23%;">
+          <p class="statHeadingReverse">Lane Agility</p>
+          <p class="statsReverse">9.99s</p>
+        </div>
+        <div class="statContainerReverse" style="width: 26%;">
+          <p class="statHeadingReverse">Shuttle Run</p>
+          <p class="statsReverse">3.21s</p>
+        </div>
+        <div class="statContainerReverse" style="width: 34%;">
+          <p class="statHeadingReverse">3/4 Court Sprint</p>
+          <p class="statsReverse">3.21s</p>
+        </div>
+      </div>
+      <svg style="position: absolute; z-index: 0" xmlns="http://www.w3.org/2000/svg" width="346" height="136" viewBox="0 0 346 136" fill="none">
+        <path d="M60.3948 0H346V136H0L60.3948 0Z" fill="#A61E36" />
+      </svg>
+    </div>
+  </div>
+  <hr />
+  <div class="footer">
+    <p class="footerHeading">The <span class="b-bg">Game</span> is the metric <span class="r-bg">Advance Analytics - In competition</span></p>
+    <div class="footerStatsContainer">
+      <div style="width: 45%;">
+        <div class="footerStatWrapper">
+          <div class="footerStat">
+            <p class="footerStatHeading">Max Speed</p>
+            <p class="footerStat">17.87mph</p>
+          </div>
+          <div class="footerStat">
+            <p class="footerStatHeading">Max Jump Height</p>
+            <p class="footerStat">38.16’</p>
+          </div>
+          <div class="footerStat">
+            <p class="footerStatHeading">Peak Realtive Propulsive Power</p>
+            <p class="footerStat">69.26 W/kg</p>
+          </div>
+        </div>
+      </div>
+      <div style="width: 45%;">
+        <div class="footerStatWrapper">
+          <div style="width: 45%;" class="footerStat">
+            <p class="footerStatHeading">Acceleration</p>
+            <p class="footerStat y-bg">14.00 ft/s^2</p>
+          </div>
+          <div style="width: 45%;" class="footerStat">
+            <p class="footerStatHeading">Deceleration</p>
+            <p class="footerStat y-bg">-14.31 ft/s^2</p>
+          </div>
+          <div style="width: 45%;" class="footerStat">
+            <p class="footerStatHeading">Time to Take Off</p>
+            <p class="footerStat y-bg">14.00 ft/s^2</p>
+          </div>
+          <div style="width: 45%;" class="footerStat">
+            <p class="footerStatHeading">Braking Phase</p>
+            <p class="footerStat y-bg">14.00 ft/s^2</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footerLogoWrapper">
+      <div class="hrWrapper">
+        <hr />
+      </div>
+      <div class="logoWrapper">
+        <img src="https://res.cloudinary.com/uzairarslan/image/upload/v1731138846/ScoutPro/logo_black_fq6o2t.png" class="logo" />
+      </div>
+      <div class="hrWrapper">
+        <hr />
+      </div>
+      <div style="position: absolute; z-index: -1; bottom: 0; left: 30px;">
+        <svg width="522" height="416" viewBox="0 0 522 416" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <mask id="mask0_450_331" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="35" y="286" width="122" height="240">
+            <path d="M35.4746 286.644H156.368V525.458H35.4746V286.644Z" fill="white" />
+          </mask>
+          <g mask="url(#mask0_450_331)">
+            <path d="M100.385 410.945C99.3886 384.623 108.322 357.879 125.284 338.245C111.874 322.376 99.5439 305.525 88.4171 287.854C88.87 288.567 66.9206 316.071 64.9152 319.096C56.5443 331.739 49.0273 345.155 43.6774 359.492C38.9162 372.263 34.996 387.157 36.4127 400.997C37.9006 415.508 48.4127 427.547 56.7125 438.65C65.5686 450.494 75.6279 461.329 86.3082 471.397C97.1438 481.601 108.639 491.017 120.413 500.017C126.138 504.4 131.941 508.681 137.776 512.916C142.233 516.149 152.473 520.706 155.268 525.431C136.443 493.646 110.438 464.978 102.578 428.555C101.329 422.761 100.605 416.866 100.385 410.945ZM115.509 484.632C86.2824 462.834 64.3589 437.73 46.5108 405.601L44.8354 402.63L44.8418 402.307C45.6375 373.089 60.2058 339.26 86.9746 304.476L87.8737 303.307L88.6953 304.544C96.1088 315.782 104.396 327 113.323 337.875L113.886 338.561L113.362 339.274C97.2926 361.179 89.9438 385.484 91.5223 411.523C92.9584 435.108 101.536 459.198 117.017 483.106L120.342 488.235L115.509 484.632Z" fill="black" fill-opacity="0.05" />
+          </g>
+          <path d="M80.8224 287.895C82.3361 286.066 83.8693 284.258 85.4348 282.477C79.3992 270.641 73.3701 258.797 67.3345 246.961C70.0385 252.271 40.0805 263.469 36.7878 264.121C30.8169 265.297 24.6584 265.532 18.6292 264.746C12.6195 263.96 6.54511 260.404 0.942939 259.987C-2.15572 281.361 3.01949 307.152 7.2567 328.096C11.8238 350.7 18.7457 372.794 27.9058 393.838C37.3247 354.894 55.6191 318.316 80.8224 287.895ZM27.1425 365.958C28.3134 362.416 21.2621 348.361 20.13 344.308C17.9565 336.498 16.1193 328.593 14.6314 320.615C11.8303 305.612 8.57638 288.278 10.1095 272.986C19.5155 273.208 28.1258 275.883 37.9263 273.921C47.5134 272.005 56.6671 267.609 64.1129 261.016C67.6256 267.845 71.1383 274.667 74.6509 281.496C53.659 306.023 37.4088 334.911 27.1425 365.958Z" fill="black" fill-opacity="0.05" />
+          <mask id="mask1_450_331" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="53" y="0" width="198" height="237">
+            <path d="M53.6895 0.215851H250.762V236.744H53.6895V0.215851Z" fill="white" />
+          </mask>
+          <g mask="url(#mask1_450_331)">
+            <path d="M61.5944 210.927C63.8068 219.618 66.375 228.228 69.1373 236.744C103.889 195.158 117.293 138.927 145.815 92.5015C170.623 52.0987 207.108 19.5534 249.28 0.188828C212.704 12.563 178.05 33.3391 153.325 63.9688C117.441 108.418 105.454 168.998 72.8311 216.076C60.9281 183.759 59.3238 147.443 68.3286 114.124C70.5863 105.756 73.5427 97.4821 78.2844 90.3237C82.6834 83.6829 88.4796 78.1915 94.3535 72.9286C113.812 55.4931 134.72 39.8052 156.767 26.0934C135.069 33.6214 114.556 44.8127 96.2748 59.0958C62.6553 85.3498 51.1275 125.84 54.3361 168.521C55.4165 182.865 58.0558 197.007 61.5944 210.927Z" fill="black" fill-opacity="0.05" />
+          </g>
+          <path d="M27.6029 259.409C30.0481 259.449 32.4934 259.288 34.9129 258.905C46.5377 257.057 57.3539 250.228 64.2887 240.36C49.1512 197.041 44.4999 149.809 50.8719 104.204C50.8719 108.398 44.8622 116.376 42.9732 120.201C39.8552 126.506 36.7436 132.81 33.632 139.115C27.9845 150.548 22.46 161.76 18.074 173.791C9.14028 198.318 3.55105 224.162 1.55859 250.308C9.04325 256.069 18.3004 259.248 27.6029 259.409ZM11.0357 244.629C12.7306 226.911 16.1721 209.374 21.2632 192.369C23.8508 183.739 26.8136 175.182 30.3004 166.888C32.7845 160.98 39.6417 152.101 39.9457 145.87C38.4255 177.024 43.3614 208.494 54.3199 237.531C44.183 250.382 24.7047 253.945 10.9581 245.462C10.9775 245.186 11.0098 244.911 11.0357 244.629Z" fill="black" fill-opacity="0.05" />
+          <path d="M91.8712 229.707C97.5963 221.924 102.862 213.777 107.623 205.315C125.659 173.28 136.339 137.179 154.866 105.441C179.151 63.8413 216.891 30.9061 260.499 13.2556C216.251 25.4281 176.57 54.7674 150.979 94.2291C132.885 122.123 121.92 154.017 107.947 184.156C100.954 199.239 93.2038 214.033 83.4485 227.402C81.1973 230.48 78.7067 233.337 76.4102 236.375C72.49 241.57 72.2701 241.174 74.9353 247.438C79.1725 257.406 84.2895 267.065 88.9407 276.831C139.089 225.688 195.751 180.929 258.791 148.7C321.825 116.47 391.413 96.9916 461.66 96.7496C405.049 86.3515 346.731 101.213 293.478 123.73C218.179 155.576 149.012 203.016 91.2178 262.461C86.6766 255.961 81.9024 247.936 84.6518 240.421C85.5574 237.948 87.2135 235.864 88.7984 233.794C89.8399 232.443 90.862 231.085 91.8712 229.707Z" fill="black" fill-opacity="0.05" />
+          <path d="M364.521 497.1C332.603 489.566 300.976 480.66 271.542 465.987C215.462 438.032 170.619 390.888 128.758 343.071C129.534 343.965 114.39 366.664 112.993 369.675C108.73 378.89 106.615 389.12 106.175 399.303C105.282 420.173 111.266 441.137 120.743 459.379C133.933 484.773 153.625 506.47 177.237 521.64C156.756 498.761 135.874 475.249 124.146 446.474C112.424 417.693 111.505 382.096 129.599 357.139C163.244 398.019 200.383 436.863 245.407 463.379C290.031 489.666 341.375 502.941 392.662 503.486C383.288 501.402 373.895 499.312 364.521 497.1Z" fill="black" fill-opacity="0.05" />
+          <path d="M423.673 316.367C384.057 316.004 344.234 311.581 304.909 306.359C274.828 302.366 244.481 297.903 214.297 300.874C194.359 302.837 174.415 308.288 156.917 318.592C151.8 321.603 134.314 331.134 134.055 337.916C133.816 344.234 150.564 359.915 154.588 364.721C183.129 398.873 216.768 428.696 254.922 450.635C302.78 478.146 357.967 492.92 412.501 488.665C308.175 481.89 208.333 424.307 145.919 337.123C169.486 318.874 199.373 311.292 228.729 309.981C258.079 308.671 287.339 313.181 316.495 316.925C384.393 325.649 454.899 330.005 519.758 307.394C488.124 314.256 455.967 316.663 423.673 316.367Z" fill="black" fill-opacity="0.05" />
+          <mask id="mask2_450_331" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="93" y="105" width="430" height="230">
+            <path d="M93.4346 105.971H522.001V334.824H93.4346V105.971Z" fill="white" />
+          </mask>
+          <g mask="url(#mask2_450_331)">
+            <path d="M139.578 249.166C174.136 218.67 212.885 193.203 253.084 171.23C321.203 134.007 397.738 105.817 474.027 116.343C427.094 99.2365 375.031 109.628 327.917 126.19C245.192 155.267 168.269 203.386 106.748 268.039C103.598 271.346 96.4559 276.596 94.871 280.911C92.8527 286.436 99.6969 292.445 103.255 297.379C111.878 309.35 120.501 321.321 129.124 333.291C146.416 314.048 170.914 303.031 195.859 298.434C220.797 293.843 246.382 295.187 271.611 297.533C313.653 301.438 355.501 308.073 397.686 309.477C439.877 310.875 482.941 306.822 521.988 290.167C452.802 307.232 380.426 299.845 309.862 290.771C278.649 286.759 247.184 282.43 215.848 285.172C184.506 287.915 152.821 298.394 129.674 320.527C120.243 309.114 111.619 296.989 103.889 284.272C115.151 271.871 127.087 260.189 139.578 249.166Z" fill="black" fill-opacity="0.05" />
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
