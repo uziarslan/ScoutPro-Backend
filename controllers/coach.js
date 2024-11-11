@@ -11,6 +11,16 @@ const csv = require("csv-parser");
 const chromeLambda = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
 
+const executablePath = path.join(
+  __dirname,
+  "node_modules",
+  "puppeteer",
+  "lib",
+  "system",
+  "chrome",
+  "chrome"
+);
+
 function sanitizeData(data) {
   return data.map((row) => {
     const sanitizedRow = { ...row };
@@ -285,9 +295,9 @@ const generatePdf = async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
-      args: chromeLambda.args,
-      executablePath: await chromeLambda.executablePath,
-      headless: chromeLambda.headless,
+      executablePath,
+      headless: true, // Or use chrome-aws-lambda.headless
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     const page = await browser.newPage();
     await page.setContent(htmlTemplate, { waitUntil: "load" });
