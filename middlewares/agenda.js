@@ -5,23 +5,17 @@ const wrapAsync = require("../utils/wrapAsync");
 const mongoose = require("mongoose");
 const Player = mongoose.model("Player");
 const fs = require("fs").promises;
-const chromeLambda = require("chrome-aws-lambda");
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 
-async function htmlToImage(player, width = 760, height = 950) {
+async function htmlToImage(player, width = 640, height = 852) {
   // Launch browser using chrome-aws-lambda
-  const browser = await puppeteer.launch({
-    args: chromeLambda.args,
-    executablePath: await chromeLambda.executablePath,
-    headless: chromeLambda.headless,
-  });
+  const browser = await puppeteer.launch();
 
   const page = await browser.newPage();
   await page.setViewport({ width, height });
 
   let htmlContent = await fs.readFile("templates/pdf.html", "utf8");
 
-  // Replace placeholders in HTML template with player data
   htmlContent = htmlContent
     .replace("{{playerName}}", player.playerName)
     .replace("{{weight}}", player.weight || "N/A")

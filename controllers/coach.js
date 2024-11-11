@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Coach = mongoose.model("Coach");
 const Player = mongoose.model("Player");
-// const puppeteer = require("puppeteer");
 const fsp = require("fs").promises;
 const fs = require("fs");
 const agenda = require("../middlewares/agenda");
@@ -10,16 +9,6 @@ const path = require("path");
 const csv = require("csv-parser");
 const chromeLambda = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
-
-const executablePath = path.join(
-  __dirname,
-  "node_modules",
-  "puppeteer",
-  "lib",
-  "system",
-  "chrome",
-  "chrome"
-);
 
 function sanitizeData(data) {
   return data.map((row) => {
@@ -197,89 +186,6 @@ const handleExcelFile = async (req, res) => {
       res.status(200).json({ success: "Players registered successfully!" });
     });
 };
-
-// const generatePdf = async (req, res) => {
-//   const { id } = req.params;
-//   const player = await Player.findById(id);
-
-//   if (!player) {
-//     return res.status(404).json({ error: "Unable to find player." });
-//   }
-
-//   let htmlTemplate = await fsp.readFile("templates/pdf.html", "utf8");
-
-//   htmlTemplate = htmlTemplate
-//     .replace("{{playerName}}", player.playerName)
-//     .replace("{{weight}}", player.weight || "N/A")
-//     .replace("{{heightWithShoes}}", player.heightWithShoes || "N/A")
-//     .replace("{{bodyFat}}", player.bodyFat || "N/A")
-//     .replace("{{wingSpan}}", player.wingSpan || "N/A")
-//     .replace("{{standingReach}}", player.standingReach || "N/A")
-//     .replace("{{handWidth}}", player.handWidth || "N/A")
-//     .replace("{{handLength}}", player.handLength || "N/A")
-//     .replace("{{standingVert}}", player.standingVert || "N/A")
-//     .replace("{{maxVert}}", player.maxVert || "N/A")
-//     .replace("{{laneAgility}}", player.laneAgility || "N/A")
-//     .replace("{{shuttle}}", player.shuttle || "N/A")
-//     .replace("{{courtSprint}}", player.courtSprint || "N/A")
-//     .replace("{{maxSpeed}}", player.maxSpeed || "N/A")
-//     .replace("{{maxJump}}", player.maxJump || "N/A")
-//     .replace("{{prpp}}", player.prpp || "N/A")
-//     .replace("{{acceleration}}", player.acceleration || "N/A")
-//     .replace("{{deceleration}}", player.deceleration || "N/A")
-//     .replace("{{ttto}}", player.ttto || "N/A")
-//     .replace("{{breakingPhase}}", player.brakingPhase || "N/A")
-//     .replace(
-//       "{{description}}",
-//       player.description === "N/A"
-//         ? "No description available."
-//         : player.description
-//     )
-//     .replace(
-//       "{{mugShot}}",
-//       player.images[0]?.path ||
-//         "https://res.cloudinary.com/uzairarslan/image/upload/v1730518031/ScoutPro/Players/ehqjrudw4jw61lzju8pt.png"
-//     )
-//     .replace(
-//       "{{standingShot}}",
-//       player.images[1]?.path ||
-//         "https://res.cloudinary.com/uzairarslan/image/upload/v1731158399/ScoutPro/Group_48_c0akgu.png"
-//     );
-
-//   try {
-//     const browser = await puppeteer.launch({
-//       executablePath: "/opt/render/.cache/puppeteer",
-//       args: ["--no-sandbox", "--disable-setuid-sandbox"],
-//     });
-//     const page = await browser.newPage();
-//     await page.setContent(htmlTemplate, { waitUntil: "load" });
-
-//     const filePath = path.join(__dirname, `ScoutPro-${player.playerName}.pdf`);
-
-//     await page.pdf({
-//       path: filePath,
-//       width: "640px",
-//       height: "852px",
-//       printBackground: true,
-//     });
-
-//     await browser.close();
-
-//     const fileBuffer = await fsp.readFile(filePath);
-
-//     res.set({
-//       "Content-Type": "application/pdf",
-//       "Content-Disposition": `attachment; filename=ScoutPro-${player.playerName}.pdf`,
-//       "Content-Length": fileBuffer.length,
-//     });
-//     res.status(200).send(fileBuffer);
-
-//     await fsp.unlink(filePath);
-//   } catch (error) {
-//     console.error("Error generating PDF:", error.message || error);
-//     res.status(500).send("Error generating PDF");
-//   }
-// };
 
 const generatePdf = async (req, res) => {
   const { id } = req.params;
