@@ -295,9 +295,10 @@ const generatePdf = async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
+      args: chromeLambda.args,
       executablePath:
-        "/opt/render/project/src/node_modules/puppeteer-core/.local-chromium/linux-901912/chrome-linux/chrome",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        process.env.CHROME_EXECUTABLE_PATH ||
+        (await chromeLambda.executablePath),
       headless: true,
     });
     const page = await browser.newPage();
