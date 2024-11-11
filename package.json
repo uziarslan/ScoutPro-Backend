@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "postinstall": "npx chromium-browser install"
+    "postinstall": "sudo apt-get install chromium-browser"
   },
   "author": "Uzair Arslan",
   "license": "ISC",
