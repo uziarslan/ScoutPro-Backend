@@ -8,7 +8,8 @@ const agenda = require("../middlewares/agenda");
 const { uploader } = require("cloudinary").v2;
 const path = require("path");
 const csv = require("csv-parser");
-const chromium = require("chrome-aws-lambda");
+const chromeLambda = require("chrome-aws-lambda");
+const puppeteer = require("puppeteer-core");
 
 function sanitizeData(data) {
   return data.map((row) => {
@@ -283,10 +284,10 @@ const generatePdf = async (req, res) => {
   // ...
 
   try {
-    const browser = await chromium.puppeteer.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath,
-      headless: chromium.headless,
+    const browser = await puppeteer.launch({
+      args: chromeLambda.args,
+      executablePath: await chromeLambda.executablePath,
+      headless: chromeLambda.headless,
     });
     const page = await browser.newPage();
     await page.setContent(htmlTemplate, { waitUntil: "load" });

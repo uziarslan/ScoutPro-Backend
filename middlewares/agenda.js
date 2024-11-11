@@ -5,14 +5,15 @@ const wrapAsync = require("../utils/wrapAsync");
 const mongoose = require("mongoose");
 const Player = mongoose.model("Player");
 const fs = require("fs").promises;
-const chromium = require("chrome-aws-lambda");
+const chromeLambda = require("chrome-aws-lambda");
+const puppeteer = require("puppeteer-core");
 
 async function htmlToImage(player, width = 760, height = 950) {
   // Launch browser using chrome-aws-lambda
-  const browser = await chromium.puppeteer.launch({
-    args: chromium.args,
-    executablePath: await chromium.executablePath,
-    headless: chromium.headless,
+  const browser = await puppeteer.launch({
+    args: chromeLambda.args,
+    executablePath: await chromeLambda.executablePath,
+    headless: chromeLambda.headless,
   });
 
   const page = await browser.newPage();
