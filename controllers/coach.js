@@ -285,6 +285,12 @@ const generatePdf = async (req, res) => {
   const { id } = req.params;
   const player = await Player.findById(id);
 
+  console.log("Puppeteer executable path:", await puppeteer.executablePath());
+  console.log(
+    "Chrome Lambda executable path:",
+    await chromeLambda.executablePath
+  );
+
   if (!player) {
     return res.status(404).json({ error: "Unable to find player." });
   }
