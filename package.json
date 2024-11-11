@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
-    "postinstall": "sudo apt-get install chromium-browser"
+    "start": "nodemon app.js"
   },
   "author": "Uzair Arslan",
   "license": "ISC",

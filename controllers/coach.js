@@ -295,7 +295,8 @@ const generatePdf = async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
-      executablePath: "/usr/bin/chromium-browser",
+      executablePath:
+        "/opt/render/project/src/node_modules/puppeteer-core/.local-chromium/linux-901912/chrome-linux/chrome",
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
       headless: true,
     });
