@@ -285,12 +285,6 @@ const generatePdf = async (req, res) => {
   const { id } = req.params;
   const player = await Player.findById(id);
 
-  console.log("Puppeteer executable path:", await puppeteer.executablePath());
-  console.log(
-    "Chrome Lambda executable path:",
-    await chromeLambda.executablePath
-  );
-
   if (!player) {
     return res.status(404).json({ error: "Unable to find player." });
   }
@@ -301,9 +295,9 @@ const generatePdf = async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
-      executablePath,
-      headless: true, // Or use chrome-aws-lambda.headless
+      executablePath: await puppeteer.executablePath(),
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      headless: true,
     });
     const page = await browser.newPage();
     await page.setContent(htmlTemplate, { waitUntil: "load" });
