@@ -1,19 +1,26 @@
 const Agenda = require("agenda");
-const puppeteer = require("puppeteer");
+// const puppeteer = require("puppeteer");
 const { uploader } = require("cloudinary").v2;
 const wrapAsync = require("../utils/wrapAsync");
 const mongoose = require("mongoose");
 const Player = mongoose.model("Player");
 const fs = require("fs").promises;
+const chromium = require("chrome-aws-lambda");
 
 async function htmlToImage(player, width = 760, height = 950) {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+  // Launch browser using chrome-aws-lambda
+  const browser = await chromium.puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless,
+  });
 
+  const page = await browser.newPage();
   await page.setViewport({ width, height });
 
   let htmlContent = await fs.readFile("templates/pdf.html", "utf8");
 
+  // Replace placeholders in HTML template with player data
   htmlContent = htmlContent
     .replace("{{playerName}}", player.playerName)
     .replace("{{weight}}", player.weight || "N/A")
@@ -56,6 +63,7 @@ async function htmlToImage(player, width = 760, height = 950) {
   const screenshotBuffer = await page.screenshot();
   await browser.close();
 
+  // If an existing preview image exists, delete it from Cloudinary
   if (player.pdfPreview && player.pdfPreview.filename) {
     const publicId = player.pdfPreview.filename.split("/").pop().split(".")[0];
     await new Promise((resolve, reject) => {
@@ -74,6 +82,7 @@ async function htmlToImage(player, width = 760, height = 950) {
     });
   }
 
+  // Upload the new image to Cloudinary
   const result = await new Promise((resolve, reject) => {
     uploader
       .upload_stream({ resource_type: "image" }, (error, result) => {
