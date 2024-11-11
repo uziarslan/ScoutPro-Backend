@@ -235,7 +235,10 @@ const generatePdf = async (req, res) => {
     );
 
   try {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      executablePath: "/opt/render/.cache/puppeteer/chrome",
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
     const page = await browser.newPage();
     await page.setContent(htmlTemplate, { waitUntil: "load" });
 

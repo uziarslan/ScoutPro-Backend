@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "postinstall": "npx puppeteer install"
   },
   "author": "Uzair Arslan",
   "license": "ISC",
@@ -28,7 +29,7 @@
     "nodemon": "^3.1.7",
     "pdfcrowd": "^6.3.0",
     "pdfkit": "^0.15.1",
-    "puppeteer": "^23.6.1",
+    "puppeteer": "^23.7.1",
     "xlsx": "^0.18.5"
   }
 }
