@@ -10,6 +10,7 @@ const csv = require("csv-parser");
 const chromeLambda = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
 
+// Helper Functions
 function sanitizeData(data) {
   return data.map((row) => {
     const sanitizedRow = { ...row };
@@ -40,6 +41,28 @@ function sanitizeData(data) {
   });
 }
 
+function transformYouTubeUrl(url) {
+  const regex = /^https:\/\/youtu\.be\/([a-zA-Z0-9_-]+)/;
+  const validRegex =
+    /^https:\/\/www\.youtube\.com\/embed\/([a-zA-Z0-9_-]+)\?si=([a-zA-Z0-9_-]+)$/;
+
+  let match = url.match(regex);
+
+  if (!match) match = url.match(validRegex);
+
+  if (match) {
+    const videoId = match[1];
+
+    const urlParams = new URLSearchParams(new URL(url).search);
+    const siParam = urlParams.get("si") || "";
+
+    const embedUrl = `https://www.youtube.com/embed/${videoId}?si=${siParam}`;
+    return embedUrl;
+  } else {
+    throw new Error("Invalid YouTube URL");
+  }
+}
+
 async function deleteFileFromCloudinary(publicId, resourceType = "video") {
   try {
     const result = await uploader.destroy(publicId, {
@@ -56,6 +79,8 @@ async function deleteFileFromCloudinary(publicId, resourceType = "video") {
   }
 }
 
+// Helper Function end
+
 const singleRegister = async (req, res) => {
   const { id } = req.user;
   const coach = await Coach.findById(id);
@@ -68,9 +93,11 @@ const singleRegister = async (req, res) => {
     fileType: i === 0 ? "mugshot" : "standingshot",
   }));
 
+  const videos = req.body.videos.map((url) => transformYouTubeUrl(url));
+
   const player = new Player({
     images,
-    videos: req.body.videos,
+    videos: videos,
     ...req.body,
   });
 
@@ -109,7 +136,9 @@ const updatePlayerInfo = async (req, res) => {
 
   if (!player) return res.status(404).json({ error: "Unable to find user" });
 
-  await Player.findByIdAndUpdate(id, { ...req.body });
+  const videos = req.body.videos.map((url) => transformYouTubeUrl(url));
+
+  await Player.findByIdAndUpdate(id, { ...req.body, videos });
 
   if (req.files && req.files.length) {
     await Promise.all(
