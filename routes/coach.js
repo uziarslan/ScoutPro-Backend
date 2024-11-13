@@ -9,6 +9,7 @@ const {
   updatePlayerInfo,
   handleExcelFile,
   generatePdf,
+  deletePlayer,
 } = require("../controllers/coach");
 const router = express();
 
@@ -70,5 +71,8 @@ router.post(
 
 // Generate Dynamic PDF
 router.get("/generate-pdf/:id", protect, wrapAsync(generatePdf));
+
+// Delete Player
+router.delete("/player/:id", protect, wrapAsync(deletePlayer));
 
 module.exports = router;
