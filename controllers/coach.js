@@ -258,7 +258,10 @@ const deletePlayer = async (req, res) => {
   if (player.images && player.images.length) {
     player.images.map(
       async (img) =>
-        img.filename && (await deleteFileFromCloudinary(img.filename, "image"))
+        img.filename &&
+        (await agenda.schedule("in 5 seconds", "deleteFileFromCloudinary", {
+          publicId: img.filename,
+        }))
     );
   }
 
