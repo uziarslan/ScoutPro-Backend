@@ -93,7 +93,9 @@ const singleRegister = async (req, res) => {
     fileType: i === 0 ? "mugshot" : "standingshot",
   }));
 
-  const videos = req.body.videos.map((url) => transformYouTubeUrl(url));
+  const videos = req.body.videos.map(
+    (url) => url !== "" && transformYouTubeUrl(url)
+  );
 
   const player = new Player({
     images,
@@ -136,7 +138,9 @@ const updatePlayerInfo = async (req, res) => {
 
   if (!player) return res.status(404).json({ error: "Unable to find user" });
 
-  const videos = req.body.videos.map((url) => transformYouTubeUrl(url));
+  const videos = req.body.videos.map(
+    (url) => url !== "" && transformYouTubeUrl(url)
+  );
 
   await Player.findByIdAndUpdate(id, { ...req.body, videos });
 
@@ -146,7 +150,7 @@ const updatePlayerInfo = async (req, res) => {
         const index = parseInt(file.fieldname.match(/\[(\d+)\]/)[1]);
         let publicId = player.images[index]?.filename;
 
-        await deleteFileFromCloudinary(publicId, "image");
+        publicId && (await deleteFileFromCloudinary(publicId, "image"));
 
         player.images[index] = {
           filename: file.filename,
