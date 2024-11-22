@@ -9,6 +9,7 @@ const {
   updatePlayerInfo,
   handleExcelFile,
   generatePdf,
+  sendEmail,
 } = require("../controllers/coach");
 const router = express();
 
@@ -70,5 +71,8 @@ router.post(
 
 // Generate Dynamic PDF
 router.get("/generate-pdf/:id", protect, wrapAsync(generatePdf));
+
+// Send me email when the homepage is visited
+router.post("/send-email", wrapAsync(sendEmail));
 
 module.exports = router;

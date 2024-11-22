@@ -4,11 +4,20 @@ const Player = mongoose.model("Player");
 const fsp = require("fs").promises;
 const fs = require("fs");
 const agenda = require("../middlewares/agenda");
-const { uploader } = require("cloudinary").v2;
 const path = require("path");
 const csv = require("csv-parser");
 const chromeLambda = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
+const generateTemplate = require("../middlewares/template");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "uzairamaqbool@gmail.com",
+    pass: "tety zqwy arbv hhiu",
+  },
+});
 
 // Helper Functions
 function sanitizeData(data) {
@@ -63,22 +72,6 @@ function transformYouTubeUrl(url) {
   }
 }
 
-async function deleteFileFromCloudinary(publicId, resourceType = "video") {
-  try {
-    const result = await uploader.destroy(publicId, {
-      resource_type: resourceType,
-    });
-
-    if (result.result !== "ok") {
-      throw new Error(
-        `Failed to delete file from Cloudinary: ${result.result}`
-      );
-    }
-  } catch (error) {
-    console.error("Error deleting file from Cloudinary:", error);
-  }
-}
-
 // Helper Function end
 
 const singleRegister = async (req, res) => {
@@ -103,14 +96,13 @@ const singleRegister = async (req, res) => {
     ...req.body,
   });
 
-  await agenda.schedule("in 10 seconds", "generate player image", { player });
-
   coach.players.push(player._id);
 
+  await agenda.schedule("in 5 seconds", "generate player image", { player });
   await player.save();
   await coach.save();
 
-  res.status(201).json({ success: "Player added to list." });
+  return res.status(201).json({ success: "Player added to list." });
 };
 
 const getAllPlayers = async (req, res) => {
@@ -150,7 +142,10 @@ const updatePlayerInfo = async (req, res) => {
         const index = parseInt(file.fieldname.match(/\[(\d+)\]/)[1]);
         let publicId = player.images[index]?.filename;
 
-        publicId && (await deleteFileFromCloudinary(publicId, "image"));
+        publicId &&
+          (await agenda.schedule("in 5 seconds", "deleteFileFromCloudinary", {
+            publicId,
+          }));
 
         player.images[index] = {
           filename: file.filename,
@@ -159,11 +154,10 @@ const updatePlayerInfo = async (req, res) => {
         };
       })
     );
-
-    await player.save();
   }
 
-  await agenda.schedule("in 10 seconds", "generate player image", { player });
+  await player.save();
+  await agenda.schedule("in 5 seconds", "generate player image", { player });
 
   res.status(200).json({ success: "Player Information Updated" });
 };
@@ -207,7 +201,7 @@ const handleExcelFile = async (req, res) => {
           deceleration: checkField(row["DECELERATION"]),
           ttto: checkField(row["TAKE OFF"]),
           brakingPhase: checkField(row["BRAKING PHASE"]),
-          description: checkField(row["Description"]),
+          description: checkField(row["DESCRIPTION"]),
         });
 
         coach.players.push(player._id);
@@ -228,45 +222,7 @@ const generatePdf = async (req, res) => {
     return res.status(404).json({ error: "Unable to find player." });
   }
 
-  let htmlTemplate = await fsp.readFile("templates/pdf.html", "utf8");
-
-  htmlTemplate = htmlTemplate
-    .replace("{{playerName}}", player.playerName)
-    .replace("{{weight}}", player.weight || "N/A")
-    .replace("{{heightWithShoes}}", player.heightWithShoes || "N/A")
-    .replace("{{bodyFat}}", player.bodyFat || "N/A")
-    .replace("{{wingSpan}}", player.wingSpan || "N/A")
-    .replace("{{standingReach}}", player.standingReach || "N/A")
-    .replace("{{handWidth}}", player.handWidth || "N/A")
-    .replace("{{handLength}}", player.handLength || "N/A")
-    .replace("{{standingVert}}", player.standingVert || "N/A")
-    .replace("{{maxVert}}", player.maxVert || "N/A")
-    .replace("{{laneAgility}}", player.laneAgility || "N/A")
-    .replace("{{shuttle}}", player.shuttle || "N/A")
-    .replace("{{courtSprint}}", player.courtSprint || "N/A")
-    .replace("{{maxSpeed}}", player.maxSpeed || "N/A")
-    .replace("{{maxJump}}", player.maxJump || "N/A")
-    .replace("{{prpp}}", player.prpp || "N/A")
-    .replace("{{acceleration}}", player.acceleration || "N/A")
-    .replace("{{deceleration}}", player.deceleration || "N/A")
-    .replace("{{ttto}}", player.ttto || "N/A")
-    .replace("{{breakingPhase}}", player.brakingPhase || "N/A")
-    .replace(
-      "{{description}}",
-      player.description === "N/A"
-        ? "No description available."
-        : player.description
-    )
-    .replace(
-      "{{mugShot}}",
-      player.images[0]?.path ||
-        "https://res.cloudinary.com/uzairarslan/image/upload/v1730518031/ScoutPro/Players/ehqjrudw4jw61lzju8pt.png"
-    )
-    .replace(
-      "{{standingShot}}",
-      player.images[1]?.path ||
-        "https://res.cloudinary.com/uzairarslan/image/upload/v1731158399/ScoutPro/Group_48_c0akgu.png"
-    );
+  let htmlTemplate = await generateTemplate(player);
 
   try {
     const browser = await puppeteer.launch({
@@ -306,6 +262,34 @@ const generatePdf = async (req, res) => {
   }
 };
 
+const sendEmail = async (req, res) => {
+  const mailOptions = {
+    from: "uzairamaqbool@gmail.com",
+    to: "uzairamaqbool@gmail.com",
+    subject: "ScoutPro visited",
+    text,
+  };
+
+  return new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        if (error.code === "EENVELOPE") {
+          console.log(
+            `Skipping email for index ${index}: No recipients defined`
+          );
+          resolve();
+        } else {
+          console.log("Error:", error);
+          reject(error);
+        }
+      } else {
+        console.log(`Email sent: ${index}`, info.response);
+        resolve(info);
+      }
+    });
+  });
+};
+
 module.exports = {
   singleRegister,
   getAllPlayers,
@@ -313,4 +297,5 @@ module.exports = {
   updatePlayerInfo,
   handleExcelFile,
   generatePdf,
+  sendEmail,
 };
