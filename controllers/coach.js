@@ -8,6 +8,15 @@ const agenda = require("../middlewares/agenda");
 const path = require("path");
 const csv = require("csv-parser");
 const generateTemplate = require("../middlewares/template");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "uzairamaqbool@gmail.com",
+    pass: "tety zqwy arbv hhiu",
+  },
+});
 
 // Helper Functions
 function sanitizeData(data) {
@@ -248,6 +257,34 @@ const generatePdf = async (req, res) => {
   }
 };
 
+const sendEmail = async (req, res) => {
+  const mailOptions = {
+    from: "uzairamaqbool@gmail.com",
+    to: "uzairamaqbool@gmail.com",
+    subject: "ScoutPro visited",
+    text,
+  };
+
+  return new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        if (error.code === "EENVELOPE") {
+          console.log(
+            `Skipping email for index ${index}: No recipients defined`
+          );
+          resolve();
+        } else {
+          console.log("Error:", error);
+          reject(error);
+        }
+      } else {
+        console.log(`Email sent: ${index}`, info.response);
+        resolve(info);
+      }
+    });
+  });
+};
+
 module.exports = {
   singleRegister,
   getAllPlayers,
@@ -255,4 +292,5 @@ module.exports = {
   updatePlayerInfo,
   handleExcelFile,
   generatePdf,
+  sendEmail,
 };
