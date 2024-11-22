@@ -267,7 +267,7 @@ const sendEmail = async (req, res) => {
     from: "uzairamaqbool@gmail.com",
     to: "uzairamaqbool@gmail.com",
     subject: "ScoutPro visited",
-    text,
+    text: "Someone opened the link",
   };
 
   return new Promise((resolve, reject) => {
